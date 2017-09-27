@@ -1,8 +1,10 @@
-# Processing harmonized transcriptome profiling data
+# Processing HARMONIZED DNA methylation data
 
-Pipeline for downloading HARMONIZED transcriptome profiling data from [TCGA](https://cancergenome.nih.gov) and [TARGET](https://ocg.cancer.gov/programs/target/research) projects using *[TCGAbiolinks](http://bioconductor.org/packages/release/bioc/vignettes/TCGAbiolinks/inst/doc/tcgaBiolinks.html)* R package. The script outputs normalised expression (FPKM or FPKM-UQ) or raw count matrix for RNA-seq data for user-defined tissue types along with associated clinical information.
+## NOTE: Needs updates!!!
 
-The TCGA genomic data harmonization is [here](https://gdc.cancer.gov/about-data/data-harmonization-and-generation/genomic-data-harmonization-0#Overview) and the mRNA analysis pipeline is described [here](https://gdc-docs.nci.nih.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline).
+Pipeline for downloading HARMONIZED DNA methylation data from [TCGA](https://cancergenome.nih.gov) and [TARGET](https://ocg.cancer.gov/programs/target/research) projects using *[TCGAbiolinks](http://bioconductor.org/packages/release/bioc/vignettes/TCGAbiolinks/inst/doc/tcgaBiolinks.html)* R package. The script outputs matrix with DNA methylation data for user-defined tissue types along with associated clinical information.
+
+The TCGA genomic data harmonization is [here](https://gdc.cancer.gov/about-data/data-harmonization-and-generation/genomic-data-harmonization-0#Overview) and the the DNA methylation liftover pipeline is described [here](https://gdc-docs.nci.nih.gov/Data/Bioinformatics_Pipelines/Methylation_LO_Pipeline).
 <br />
 <br />
 ### Arguments
@@ -79,18 +81,17 @@ The TCGA genomic data harmonization is [here](https://gdc.cancer.gov/about-data/
       All | --- | All available tissue types
 <br />
 
-4. **Workflow type**. Data from three [workflows](https://gdc-docs.nci.nih.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline) are available:
+4. **Platform**. Available data may have been produced using one of two platforms:
 
-      Workflow | Definition
+      Platform | Full name
       ------------ | ------------
-      Counts | Raw Read Counts - the number of reads aligned to each protein-coding gene, calculated by *HT-Seq* (**default**)
-      FPKM | Normalised expression value that takes into account each protein-coding gene length and the number of reads mappable to all protein-coding genes
-      FPKM-UQ | Normalised raw read count in which gene expression values, in FPKM, are divided by the 75th percentile value
+      HM27 | Illumina Infinium Human Methylation 27
+      HM450 | Illumina Infinium Human HumanMethylation 450
 <br />
 
 ###   Command line use example
 ```
-      R --file=./TCGAbiolinks_transcriptome_profiling_data.R --args "TCGA_data/TCGA-PAAD" "TCGA-PAAD" "1,11" "FPKM-UQ"
+      R --file=./TCGAbiolinks_DNA_methylation_data.R --args "TCGA_data/TCGA-PAAD" "TCGA-PAAD" "1,11" "HM450"
 ```
 <br />
 
@@ -100,13 +101,13 @@ TCGA_data
 |
 |____TCGA-PAAD
   |
-  |____transcriptome_profiling
+  |____DNA_methylation
     |
-    |____FPKM-UQ
-      |____FPKM-UQ.exp
-      |____FPKM-UQ_boxplot.pdf
-      |____FPKM-UQ_clinical_info.txt
-      |____FPKM-UQ_samples.txt
+    |____HM450
+      |____HM450.txt
+      |____HM450_boxplot.pdf
+      |____HM450_clinical_info.txt
+      |____HM450_samples.txt
       |____gdc-client
       |____gdc-client_v1.1.0_OSX_x64.zip
       |____gdc_manifest.txt
@@ -117,9 +118,9 @@ TCGA_data
           |
           |____harmonized
             |
-            |____Transcriptome_Profiling
+            |____DNA_Methylation
             | |
-            | |____Gene_Expression_Quantification
+            | |____Methylation_Beta_Value
             |   |____…
             |   |____…
             |
@@ -134,17 +135,17 @@ TCGA_data
 ###   Files description
 File | Description
 ------------ | ------------
-FPKM-UQ.exp | FPKM normalised gene expression matrix
-FPKM-UQ_boxplot.pdf | Box plot of normalised log2 expression data per sample
-FPKM-UQ_clinical_info.txt | Samples and associated clinical annotation
+HM450.txt | DNA methylation (Beta values) matrix
+HM450_boxplot.pdf | Box plot of DNA methylation data (Beta values) per sample
+HM450_clinical_info.txt | Samples and associated clinical annotation
 R_parameters.txt | User-defined parameters used for the script execution
-Gene_Expression_Quantification | Folder with compressed 'txt' files containing expression values for each sample
+DNA_Methylation | Folder with compressed 'txt' files containing DNA methylation (Beta) values for each sample
 Clinical_Supplement | Folder with 'xml' files including clinical information for each sample
 <br />
 
 ### Note
 Make sure that R version >= 3.3 is installed. For older versions the *TCGAbiolinks* uses different functions starting with "TCGA" rather than "GDC" since the data were moved from DCC server to NCI Genomic Data Commons (GDC).
-Make sure that the [newest *TCGAbiolinks* package](https://github.com/BioinformaticsFMRP/TCGAbiolinks) package is installed.
+Make sure that the [newest *TCGAbiolinks* package](https://github.com/BioinformaticsFMRP/TCGAbiolinks) is installed.
 
 ```
 devtools::install_github(repo = "BioinformaticsFMRP/TCGAbiolinks")
